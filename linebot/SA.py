@@ -12,7 +12,7 @@ device_model = 'linebot007'
 IDF_list = ['linebot_json_i']
 ODF_list = ['linebot_json_o']
 device_id = '12345678910' #if None, device_id = MAC address
-device_name = 'linebot'
+device_name = 'linebot_skes'
 exec_interval = 1  # IDF/ODF interval
 
 import requests, json
@@ -41,15 +41,17 @@ def linebot_json_i():
         return None 
 
 def linebot_json_o(data:list):
-    print("data: ", data[0]) # {"user_id": user_id, "selected_music": selected_music}
-    selected_music = data[0]["selected_music"]
-    try:
-        response = requests.post(f'{config.APP_URL}/play_music', json={'music_name': selected_music})
-        if response.status_code == 200:
-            print(f'Music {selected_music} play request sent successfully.')
-        else:
-            print('Failed to send music play request.')
-    except Exception as e:
-        print(f'Error: {e}')
+    print("data: ", data) # [[{'user_id': 'id', 'selected_music': 'babyshark.mp3'}, {'need_to_change_music': False}]]
+    need_to_change_music = data[0][1]["need_to_change_music"]
+    if need_to_change_music:
+        selected_music = data[0][0]["selected_music"]
+        try:
+            response = requests.post(f'{config.APP_URL}/play_music', json={'music_name': selected_music})
+            if response.status_code == 200:
+                print(f'Music {selected_music} play request sent successfully.')
+            else:
+                print('Failed to send music play request.')
+        except Exception as e:
+            print(f'Error: {e}')
 
-    send_mesage(data[0]["user_id"], f"您的寶寶在哭泣! 正在為您撥放音樂: {selected_music}") # send notify to parent's line through linebot
+        send_mesage(data[0][0]["user_id"], f"您的寶寶在哭泣! 正在為您撥放音樂: {selected_music}") # send notify to parent's line through linebot

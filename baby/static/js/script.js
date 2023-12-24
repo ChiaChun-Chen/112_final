@@ -136,7 +136,7 @@ function startRecording() {
                 }
             }, 7000); // 錄音7秒
         }
-    }, 20000); // 每20秒執行一次
+    }, 30000); // 每30秒執行一次
 }
 
 function stopRecordingProcess() {
