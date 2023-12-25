@@ -12,32 +12,40 @@ IDF_list = ['linebot_json_i']
 ODF_list = ['linebot_json_o']
 device_id = '123456789' #if None, device_id = MAC address
 device_name = 'web_skes'
-exec_interval = 1  # IDF/ODF interval
+exec_interval = 5  # IDF/ODF interval
 
 import requests, json, time
 import config
-start_crying_time = 0
+from model.test_model import model_test_single
+last_crying_time = 0
 
 def on_register(r):
     print('Server: {}\nDevice name: {}\nRegister successfully.'.format(r['server'], r['d_name']))
 
 def linebot_json_i():
-    response = requests.get(f'{config.APP_URL}/get_baby_state')
-    response = response.json()["state"]
+    global last_crying_time
+    response = model_test_single("./model/audio/baby-crying-04.wav", "./model/densenet.pth")
+    if response[0][0]>response[0][1]:
+        response = 0
+    else:
+        response = 1
+    print("response: ", response)
 
-    global start_crying_time
-    duration = time.time() - start_crying_time
-
-    if response and (duration>120): # baby is crying and duration time is larger than 2 minutes
-        start_crying_time = time.time()
-        return {"need_to_change_music": True}
-
-    return {"need_to_change_music": False}
+    if response: # baby is crying
+        model_predict_time = time.time()
+        if (model_predict_time-last_crying_time)<10:
+            return None
+        last_crying_time = model_predict_time
+        selected_music = "babyshark.mp3" # select music name from 's3'
+        return {"baby_id": random.choice(["A007", "A008", "A009", "A010", "A101"]), "selected_music": selected_music}
+    else:
+        return None 
 
 def linebot_json_o(data:list):
-    print("data: ", data) # [[{'user_id': 'id', 'selected_music': 'babyshark.mp3'}, {'need_to_change_music': False}]]
-    selected_music = data[0][0]["selected_music"]
-    need_to_change_music = data[0][1]["need_to_change_music"]
-    if need_to_change_music:
-        print("select music: ", selected_music)  # need to get music
+    print("data: ", data) # [{"baby_id": "A007", "selected_music": selected_music}]
+    
+    selected_music = data[0]["selected_music"]
+    
+    print("select music: ", selected_music)  # need to get music
+    return data
 

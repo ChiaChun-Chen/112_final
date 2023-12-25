@@ -84,11 +84,11 @@ def main():
     idList = loadUserId()
     if idList: user_id_set = set(idList)
 
-    # try:
-    #     for userId in user_id_set:
-    #         line_bot_api.push_message(userId, TextSendMessage(text='LineBot is ready for you.'))  # Push API example
-    # except Exception as e:
-    #     print(e)
+    try:
+        for userId in user_id_set:
+            line_bot_api.push_message(userId, TextSendMessage(text='LineBot is ready for you.'))  # Push API example
+    except Exception as e:
+        print(e)
 
     app.run('127.0.0.1', port=32768, threaded=True, use_reloader=False)
 
