@@ -30,6 +30,9 @@ def linebot_json_i():
 def linebot_json_o(data:list):
     print("data: ", data) # [{"baby_id": "A007", "selected_music": selected_music}]
     
+    if data==None:
+        return 0
+
     baby_id = data[0]["baby_id"]
     if baby_id in web_line_dict.keys():
         user_id = web_line_dict[baby_id]

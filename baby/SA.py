@@ -33,8 +33,11 @@ def linebot_json_i():
 
     if response: # baby is crying
         model_predict_time = time.time()
-        if (model_predict_time-last_crying_time)<10:
+        print(f'duration = {model_predict_time-last_crying_time}')
+        
+        if (model_predict_time-last_crying_time)<20:
             return None
+        
         last_crying_time = model_predict_time
         selected_music = "babyshark.mp3" # select music name from 's3'
         return {"baby_id": random.choice(["A007", "A008", "A009", "A010", "A101"]), "selected_music": selected_music}
@@ -42,8 +45,11 @@ def linebot_json_i():
         return None 
 
 def linebot_json_o(data:list):
-    print("data: ", data) # [{"baby_id": "A007", "selected_music": selected_music}]
+    # print("data: ", data) # [{"baby_id": "A007", "selected_music": selected_music}]
     
+    if data==None:
+        return 0
+
     selected_music = data[0]["selected_music"]
     
     print("select music: ", selected_music)  # need to get music
