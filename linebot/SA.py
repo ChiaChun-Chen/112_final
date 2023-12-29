@@ -46,5 +46,5 @@ def linebot_json_o(data:list):
         except Exception as e:
             print(f'Error: {e}')
 
-        send_mesage(user_id, f"您的寶寶在哭泣! 正在為您撥放音樂: {selected_music}") # send notify to parent's line through linebot
+        # send_mesage(user_id, f"您的寶寶在哭泣! 正在為您撥放音樂: {selected_music}") # send notify to parent's line through linebot
     return data

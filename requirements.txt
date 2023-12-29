@@ -1,3 +1,4 @@
-Flask
+Flask>=2.2.2
 requests
 paho-mqtt
+line-bot-sdk==3.7.0

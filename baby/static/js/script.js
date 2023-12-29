@@ -97,6 +97,12 @@ document.getElementById('startButton').addEventListener('click', () => {
                 console.log(mediaRecorder.state);
                 console.log("recorder stopped");
                 const audioBlob = new Blob(audioChunks);
+                console.log("blob: ", audioBlob);
+
+                var reader = new FileReader();
+                babyvoice = reader.readAsBinaryString(audioBlob);
+                console.log("babyvoice = ", babyvoice);
+
                 sendAudioToServer(audioBlob);
                 audioChunks = [];
             });
@@ -149,6 +155,9 @@ function stopRecordingProcess() {
 function sendAudioToServer(audioBlob) {
     const formData = new FormData();
     formData.append('audio', audioBlob);
+    const audioFile = formData.get('audio');
+    console.log('file_context: ',audioFile);
+    
 
     fetch('/upload', {
         method: 'POST',
