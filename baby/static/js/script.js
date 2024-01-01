@@ -96,12 +96,17 @@ document.getElementById('startButton').addEventListener('click', () => {
             mediaRecorder.addEventListener('stop', () => {
                 console.log(mediaRecorder.state);
                 console.log("recorder stopped");
-                const audioBlob = new Blob(audioChunks);
-                console.log("blob: ", audioBlob);
+                const audioBlob = new Blob(audioChunks, {type: "audio/wav"});
+                const audio = new Audio();
+                const audioURL = window.URL.createObjectURL(audioBlob);
+                console.log("audio url: ", audioURL);
+                audio.src = audioURL;
+                saveRecording(audioURL);
+                playMusic(audioURL);
 
-                var reader = new FileReader();
-                babyvoice = reader.readAsBinaryString(audioBlob);
-                console.log("babyvoice = ", babyvoice);
+                // var reader = new FileReader();
+                // babyvoice = reader.readAsBinaryString(audioBlob);
+                // console.log("babyvoice = ", babyvoice);
 
                 sendAudioToServer(audioBlob);
                 audioChunks = [];
@@ -180,23 +185,15 @@ function playMusic(musicUrl) {
     musicPlayer.load();
     musicPlayer.play();
     musicPlayer.hidden = false;  
-  }
-  
+}
 
-//   function sendAudioToServer(audioBlob) {
-//     const formData = new FormData();
-//     formData.append('audio', audioBlob);
-  
-//     fetch('/upload', {
-//         method: 'POST',
-//         body: formData
-//     }).then(response => {
-//         return response.json();  
-//     }).then(data => {
-//         if (data.musicUrl) {
-//             playMusic(data.musicUrl);  
-//         }
-//     }).catch(error => {
-//         console.error(error);
-//     });
-//   }
+var saveRecording = function(url){
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display:none";
+    a.href = url;
+    a.download = url+'.wav';
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+};

@@ -21,6 +21,7 @@ import random
 
 from DAI import main as DAI_main
 import threading
+from model.test_model import model_test_single
 
 app = Flask(__name__, static_folder='static')
 
@@ -32,6 +33,12 @@ def index():
 @app.route('/upload', methods=['POST'])
 def upload():
     audio_file = request.files['audio']
+    response = model_test_single(audio_file, "./model/densenet.pth")
+    if response[0][0]>response[0][1]:
+        response = 0
+    else:
+        response = 1
+    print(f"upload model response = {response}")
     return jsonify({'message': 'Audio file received and processed'})
 
 @app.route('/play_music', methods=['POST'])
