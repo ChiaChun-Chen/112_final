@@ -24,6 +24,11 @@ def on_register(r):
 
 def linebot_json_i():
     global last_crying_time
+    model_predict_time = time.time()
+    print(f'duration = {model_predict_time-last_crying_time}')
+    if (model_predict_time-last_crying_time)<20:
+        return None
+    
     response = model_test_single("./model/audio/baby-crying-04.wav", "./model/densenet.pth")
     if response[0][0]>response[0][1]:
         response = 0
@@ -32,11 +37,7 @@ def linebot_json_i():
     print("response: ", response)
 
     if response: # baby is crying
-        model_predict_time = time.time()
-        print(f'duration = {model_predict_time-last_crying_time}')
         
-        if (model_predict_time-last_crying_time)<20:
-            return None
         
         last_crying_time = model_predict_time
         selected_music = "babyshark.mp3" # select music name from 's3'

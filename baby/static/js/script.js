@@ -101,14 +101,14 @@ document.getElementById('startButton').addEventListener('click', () => {
                 const audioURL = window.URL.createObjectURL(audioBlob);
                 console.log("audio url: ", audioURL);
                 audio.src = audioURL;
-                saveRecording(audioURL);
+                // saveRecording(audioURL);
                 playMusic(audioURL);
 
                 // var reader = new FileReader();
                 // babyvoice = reader.readAsBinaryString(audioBlob);
                 // console.log("babyvoice = ", babyvoice);
 
-                sendAudioToServer(audioBlob);
+                sendAudioURLToServer(audioURL);
                 audioChunks = [];
             });
 
@@ -161,6 +161,27 @@ function sendAudioToServer(audioBlob) {
     const formData = new FormData();
     formData.append('audio', audioBlob);
     const audioFile = formData.get('audio');
+    console.log('file_context: ',audioFile);
+    
+
+    fetch('/upload', {
+        method: 'POST',
+        body: formData
+    }).then(response => {
+
+        return response.text();
+    }).then(text => {
+        console.log(text);
+
+    }).catch(error => {
+        console.error(error);
+    });
+}
+
+function sendAudioURLToServer(audioURL) {
+    const formData = new FormData();
+    formData.append('audioURL', audioURL);
+    const audioFile = formData.get('audioURL');
     console.log('file_context: ',audioFile);
     
 

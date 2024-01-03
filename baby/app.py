@@ -32,7 +32,8 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    audio_file = request.files['audio']
+    audio_file = request.form
+    print(f'audio url = {audio_file}')
     response = model_test_single(audio_file, "./model/densenet.pth")
     if response[0][0]>response[0][1]:
         response = 0
