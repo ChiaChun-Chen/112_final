@@ -40,6 +40,7 @@ def upload():
     else:
         response = 1
     print(f"upload model response = {response}")
+    
     return jsonify({'message': 'Audio file received and processed'})
 
 @app.route('/play_music', methods=['POST'])
