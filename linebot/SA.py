@@ -37,14 +37,7 @@ def linebot_json_o(data:list):
     if baby_id in web_line_dict.keys():
         user_id = web_line_dict[baby_id]
         selected_music = data[0]["selected_music"]
-        try:
-            response = requests.post(f'{config.APP_URL}/play_music', json={'music_name': selected_music})
-            if response.status_code == 200:
-                print(f'Music {selected_music} play request sent successfully.')
-            else:
-                print('Failed to send music play request.')
-        except Exception as e:
-            print(f'Error: {e}')
 
+        print(f'Music {selected_music} play request sent successfully.')
         # send_mesage(user_id, f"您的寶寶在哭泣! 正在為您撥放音樂: {selected_music}") # send notify to parent's line through linebot
-    return data
+    print(f'linebot output = {data[0]}')

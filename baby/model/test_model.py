@@ -30,6 +30,7 @@ def model_test_single(file,weights):       # 丟入wav檔案
     net = DenseNet()
     net.load_state_dict(torch.load(weights))
     single = get_files(file)[0]
+    single = file
     input = create_single_data(single)
     input = torch.from_numpy(input).float()
     input = input.unsqueeze(0)
