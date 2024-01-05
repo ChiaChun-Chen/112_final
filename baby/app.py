@@ -56,7 +56,7 @@ def get_music():
 @app.route('/predict_recorder', methods=['GET'])
 def predict_recorder():
     # get the record from device with the static file name "myRecorder.wav"
-    response = model_test_single("./model/audio/myRecorder.wav", "./model/densenet.pth")
+    response = model_test_single("./model/audio/myRecorder.wav", "./model/model_para4.pth")
     if response[0][0]>response[0][1]:
         response = 0
     else:
