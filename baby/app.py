@@ -10,10 +10,29 @@ import glob
 
 app = Flask(__name__, static_folder='static')
 music_to_play = ""
+record_status = False
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/change_record_status', methods=['POST'])
+def change_record_status():
+    # Since the true/false in javascript is different from True/False in python,
+    # so we cannot simply use boolean
+    global record_status
+    status = request.form.get('record_status')
+    print(f'status = {status}')
+    if status == "true":
+        record_status = True
+    else:
+        record_status = False
+    print(f'record status = {record_status}')
+    return {"record status": record_status}
+
+@app.route('/get_record_status', methods=['GET'])
+def get_record_status():
+    return {"record_status": record_status}
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -33,6 +52,16 @@ def upload():
 @app.route('/get_music', methods=['GET'])
 def get_music():
     return {"selected_music": music_to_play}
+
+@app.route('/predict_recorder', methods=['GET'])
+def predict_recorder():
+    # get the record from device with the static file name "myRecorder.wav"
+    response = model_test_single("./model/audio/myRecorder.wav", "./model/densenet.pth")
+    if response[0][0]>response[0][1]:
+        response = 0
+    else:
+        response = 1
+    return {"predict_response": response}
 
 @app.route('/play_music', methods=['POST'])
 def play_music():

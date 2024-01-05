@@ -37,6 +37,7 @@ function startRecording() {
     mediaRecorder.start();
     console.log(mediaRecorder.state);
     console.log("recorder started");
+    sendRecordStatusToServer("true");
 
     setTimeout(() => {
         if (mediaRecorder.state === 'recording') {
@@ -61,10 +62,24 @@ function startRecording() {
 }
 
 function stopRecordingProcess() {
+    sendRecordStatusToServer("false");
     clearInterval(recordInterval);
     if (mediaRecorder.state === 'recording') {
         mediaRecorder.stop();
     }
+}
+
+function sendRecordStatusToServer(status){
+    const formData = new FormData();
+    formData.append('record_status', status);
+    console.log('record status: ', status);
+
+    fetch('/change_record_status', {
+        method: 'POST',
+        body: formData
+    }).then(response => {
+        console.log(response)
+    })
 }
 
 function sendAudioToServer(audioBlob) {
