@@ -90,7 +90,7 @@ def main():
     except Exception as e:
         print(e)
 
-    app.run('127.0.0.1', port=32768, threaded=True, use_reloader=False)
+    app.run('127.0.0.1', port=32678, threaded=True, use_reloader=False)
 
    
 if __name__ == "__main__":
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
     
-    app.run('127.0.0.1', port=32768, threaded=True, use_reloader=False)
+    app.run('127.0.0.1', port=32678, threaded=True, use_reloader=False)
 
     
 

@@ -11,6 +11,7 @@ import glob
 app = Flask(__name__, static_folder='static')
 music_to_play = ""
 record_status = False
+predict_status = 0
 
 @app.route('/')
 def index():
@@ -43,11 +44,11 @@ def upload():
     audio_file.save(filepath)
 
     # choose music to play randomly
-    global music_to_play
+    global music_to_play, predict_status
     music_list = glob.glob("./static/music/*.mp3")
     music_to_play = random.choice(music_list)
 
-    return jsonify({'message': 'Audio file received and processed', 'music_path': music_to_play})
+    return jsonify({'message': 'Audio file received and processed', 'music_path': music_to_play, 'predict_status': predict_status})
 
 @app.route('/get_music', methods=['GET'])
 def get_music():
@@ -55,13 +56,19 @@ def get_music():
 
 @app.route('/predict_recorder', methods=['GET'])
 def predict_recorder():
-    # get the record from device with the static file name "myRecorder.wav"
+    # get the record from device with the static file name "myRecorder.wav", "crowd_talking_1.wav"
     response = model_main("./model/audio/myRecorder.wav")
-    if response[0][0]>response[0][1]:
-        response = 0
-    else:
-        response = 1
+    global predict_status
+    predict_status = response
+    # if response[0][0]>response[0][1]:
+    #     response = 0
+    # else:
+    #     response = 1
     return {"predict_response": response}
+
+@app.route('/get_predict_status', methods=['GET'])
+def get_predict_status():
+    return {"predict_status": predict_status}
 
 @app.route('/play_music', methods=['POST'])
 def play_music():

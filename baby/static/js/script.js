@@ -87,6 +87,7 @@ function sendAudioToServer(audioBlob) {
     formData.append('audio', audioBlob);
     const audioFile = formData.get('audio');
     console.log('file_context: ',audioFile);
+    var music_path = ""
     
 
     fetch('/upload', {
@@ -99,9 +100,24 @@ function sendAudioToServer(audioBlob) {
         // parse the response to get music path to play
         var response = JSON.parse(text);
         console.log("response: ", response['music_path']);
+        music_path = response['music_path']
+    }).catch(error => {
+        console.error(error);
+    });
+
+    fetch('/predict_recorder', {
+        method: 'GET'
+    }).then(response => {
+        return response.text();
+    }).then(text => {
+
+        // parse the response
+        var response = JSON.parse(text);
 
         // play the music
-        playMusic(response['music_path']);
+        if(response['predict_response'] == 1){
+            playMusic(music_path);
+        }
     }).catch(error => {
         console.error(error);
     });

@@ -39,5 +39,5 @@ def linebot_json_o(data:list):
         selected_music = data[0]["selected_music"]
 
         print(f'Music {selected_music} play request sent successfully.')
-        # send_mesage(user_id, f"您的寶寶在哭泣! 正在為您撥放音樂: {selected_music}") # send notify to parent's line through linebot
+        send_mesage(user_id, f"您的寶寶在哭泣! 正在為您撥放音樂: {selected_music}") # send notify to parent's line through linebot
     print(f'linebot output = {data[0]}')

@@ -4,7 +4,8 @@ from glob import glob
 from model.dataprocessing.dataprocessing import *
 import warnings
 import sys
-from model.trim_wav_file import *
+from model.trim_wav_file import trim_audio
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 warnings.filterwarnings("ignore")
@@ -48,11 +49,13 @@ def return_to_web(a,b):
     
 def main(input):
     output_wav = './store5.wav'
+    print(output_wav)
     trim_audio(input,output_wav)       #切5秒影片
-    out = model_test_single(output_wav,'"./model/model_para4.pth"')
+    out = model_test_single(output_wav,'./model/model_para4.pth')
     print(out)
     return_value = return_to_web(out[0][0],out[0][1])
     print(return_value)
+    return return_value
     
 if __name__=='__main__':
     if len(sys.argv) != 2:

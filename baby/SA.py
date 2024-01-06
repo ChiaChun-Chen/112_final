@@ -37,9 +37,9 @@ def linebot_json_i():
         return None
     
     # call api to get the model predict
-    response = requests.get(f'{config.APP_URL}/predict_recorder').json()["predict_response"]
+    response = requests.get(f'{config.APP_URL}/get_predict_status').json()["predict_status"]
 
-    if response: # baby is crying
+    if response == 1: # baby is crying
         last_crying_time = model_predict_time
         print(requests.get(f'{config.APP_URL}/get_music').json())
         selected_music = requests.get(f'{config.APP_URL}/get_music').json()["selected_music"]
