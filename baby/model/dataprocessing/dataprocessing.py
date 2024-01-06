@@ -34,8 +34,8 @@ def trim_data(datas, sample_rate, time):
 def build_3_channels_melspectrograms(data,sample_rate):     #製作3通道梅爾頻譜圖
     num_channels = 3 
     #設定三個不同窗口和跳躍距離
-    hop_size = [128,256,512]
-    win_size = [100,200,400]
+    hop_size = [10,25,50]
+    win_size = [25,50,100]
     #轉換成梅爾頻譜圖
     S_db_channels = []
     for j in range(num_channels):
@@ -56,7 +56,7 @@ def create_dataset_with_label(data,label):
     new_entry['target'] = label
     return new_entry
 
-def create_with_trimmed(path,sample_rate=22050,label=1):
+def create_with_trimmed(path,label,sample_rate=22050):
     files = get_files(path)
     y, sr = turn_files_into_data(files)
     trimmed_data = trim_data(y,sample_rate=sample_rate,time=5)
@@ -69,7 +69,7 @@ def create_with_trimmed(path,sample_rate=22050,label=1):
         dataset.append(create_dataset_with_label(img,label))
     return dataset
 
-def create_with_no_trimmed(path,sample_rate=22050,label=1):
+def create_with_no_trimmed(path,label,sample_rate=22050):
     files = get_files(path)
     y, sr = turn_files_into_data(files)
     imgs = []
@@ -86,8 +86,8 @@ def create_single_data(data,sample_rate=22050):       #單一資料input
     sr = librosa.load(data)[1] #sample_rate 採樣頻率
     num_channels = 3 
     #設定三個不同窗口和跳躍距離
-    hop_size = [128,256,512]
-    win_size = [100,200,400]
+    hop_size = [10,25,50]
+    win_size = [25,50,100]
     #轉換成梅爾頻譜圖
     S_db_channels = []
     for j in range(num_channels):

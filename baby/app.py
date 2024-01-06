@@ -3,7 +3,7 @@ import random
 
 from DAI import main as DAI_main
 import threading
-from model.test_model import model_test_single
+from model.test_model import main as model_main
 import io
 import soundfile
 import glob
@@ -56,7 +56,7 @@ def get_music():
 @app.route('/predict_recorder', methods=['GET'])
 def predict_recorder():
     # get the record from device with the static file name "myRecorder.wav"
-    response = model_test_single("./model/audio/myRecorder.wav", "./model/model_para4.pth")
+    response = model_main("./model/audio/myRecorder.wav")
     if response[0][0]>response[0][1]:
         response = 0
     else:
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     t.daemon = True
     t.start()
 
-    app.run(debug=True, port=8089, host="0.0.0.0")
+    app.run(debug=True, port=8089, host="127.0.0.1")
 
 
 
