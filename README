@@ -1,0 +1,5 @@
+#先安裝requirements，若遇"Read timed out"就再輸入一次pip ....
+
+#訓練模型python train_model.py 約6分鐘，模型檔名可更改
+
+#測試模型python test_model.py xxxxxxx.wav  第一次要加載模型會比較久
